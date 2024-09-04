@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.easybuilder.common.base.launcher.ActivityLauncher
 import com.easybuilder.common.utils.PermissionHelper
 import kotlinx.coroutines.launch
 import java.lang.reflect.Method
@@ -23,14 +24,16 @@ abstract class BaseVMActivity<VB :ViewBinding,VM:ViewModel>(
     protected lateinit var mViewModel:VM
     //ViewBinding的实例
     protected lateinit var mBinding:VB
+    //Activity启动器
+    protected val activityLauncher by lazy { ActivityLauncher() }
+
     //权限工具
-    protected val permissionTool: PermissionHelper? by lazy {
-        this@BaseVMActivity.let {
-            PermissionHelper(it)
-        }
-    }
+    protected lateinit var permissionTool: PermissionHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        activityLauncher.registerForActivityResult(this)
+        if (!::permissionTool.isInitialized) permissionTool = PermissionHelper(this)
         // 初始化ViewModel
         mViewModel = createViewModel(viewModelClass)
         // 初始化ViewBinding
@@ -83,6 +86,10 @@ abstract class BaseVMActivity<VB :ViewBinding,VM:ViewModel>(
      */
     private fun <T:ViewModel> createViewModel(cls:Class<T>) : T{
         return ViewModelProvider(this)[cls]
+    }
+
+    companion object{
+        val TAG:String = BaseVMActivity::class.java.simpleName
     }
 
 }

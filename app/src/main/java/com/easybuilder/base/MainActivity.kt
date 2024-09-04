@@ -1,9 +1,13 @@
 package com.easybuilder.base
+import android.Manifest
+import android.util.Log
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.easybuilder.base.databinding.ActivityMainBinding
 import com.easybuilder.common.base.BaseVMActivity
 import com.easybuilder.common.net.RetrofitClient
+import com.easybuilder.common.utils.PermissionHelper
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
@@ -32,11 +36,32 @@ class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
                     mViewModel.textFlow.emit("${System.currentTimeMillis()} $it" )
                 }
             }
+
+        val hasPermission = permissionTool.hasPermission(Manifest.permission.CAMERA)
+        Log.d(TAG, "onClick: "+hasPermission)
+        permissionTool.requestPermission(object : PermissionHelper.PermissionCallback {
+            override fun callback(
+                granted: MutableMap<String, Boolean>?,
+                denied: MutableMap<String, Boolean>?,
+                isAllGranted: Boolean,
+                isAllDenied: Boolean
+            ) {
+            }
+
+            override fun callback(result: Boolean?) {
+            }
+
+        },Manifest.permission.CAMERA)
     }
 
     override fun loadData() {
         mBinding.tv.text = "测试"
 
+//    registerForActivityResult(ActivityResultContracts.StartActivityForResult(), {
+//        if (it.resultCode == RESULT_OK) {
+//            mBinding.tv.text = "测试2"
+//        }
+//    })
 
     }
 
