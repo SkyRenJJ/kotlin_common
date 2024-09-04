@@ -20,9 +20,7 @@ class SampleRepository {
         RetrofitClient.createService<ApiService>("https://mockapi.eolink.com/")
     }
 
-    suspend fun test(block:(String)->Unit) {
-        val test:TestBean = client.test()
-        block(test.message)
-
+    suspend fun test():TestBean {
+        return client.test()
     }
 }

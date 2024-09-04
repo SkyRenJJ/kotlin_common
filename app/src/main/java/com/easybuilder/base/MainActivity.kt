@@ -8,7 +8,9 @@ import com.easybuilder.base.databinding.ActivityMainBinding
 import com.easybuilder.common.base.BaseVMActivity
 import com.easybuilder.common.net.RetrofitClient
 import com.easybuilder.common.utils.PermissionHelper
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 
@@ -31,11 +33,7 @@ class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
 
     private fun onClick(view: View?) {
 //            mViewModel.textFlow.emit("${System.currentTimeMillis()}")
-            mViewModel.test {
-                lifecycleScope.launch {
-                    mViewModel.textFlow.emit("${System.currentTimeMillis()} $it" )
-                }
-            }
+            mViewModel.test()
 
         val hasPermission = permissionTool.hasPermission(Manifest.permission.CAMERA)
         Log.d(TAG, "onClick: "+hasPermission)
