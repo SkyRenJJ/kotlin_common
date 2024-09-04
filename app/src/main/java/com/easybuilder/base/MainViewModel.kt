@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.easybuilder.common.net.sample.SampleRepository
+import com.easybuilder.common.net.sample.TestBean
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -16,21 +17,17 @@ class MainViewModel:ViewModel() {
 
     val textFlow:MutableSharedFlow<String> = MutableSharedFlow()
 
+    /**
+     * 接口网络测试
+     */
     fun test() {
         viewModelScope.launch {
-            Log.d("====", "test: 111")
-           var test = withContext(Dispatchers.IO) {
-               Log.d("====", "test: ${Thread.currentThread().name}")
+           var test :TestBean = withContext(Dispatchers.IO) {
                sampleRepo.test()
             }
-            Log.d("====", "test: 222  ${Thread.currentThread().name}")
-
             withContext(Dispatchers.Main) {
-                Log.d("====", "test: 2525252  ${Thread.currentThread().name}")
                 textFlow.emit(test.message!!)
             }
-            Log.d("====", "test: 3333  ${Thread.currentThread().name}")
-
         }
     }
 }

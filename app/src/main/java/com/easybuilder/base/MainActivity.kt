@@ -33,7 +33,7 @@ class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
 
     private fun onClick(view: View?) {
 //            mViewModel.textFlow.emit("${System.currentTimeMillis()}")
-            mViewModel.test()
+        mViewModel.test()
 
         val hasPermission = permissionTool.hasPermission(Manifest.permission.CAMERA)
         Log.d(TAG, "onClick: "+hasPermission)

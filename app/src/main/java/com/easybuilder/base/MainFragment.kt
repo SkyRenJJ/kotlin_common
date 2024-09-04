@@ -10,7 +10,7 @@ import com.easybuilder.common.base.BaseVMFragment
  */
 class MainFragment:BaseVMFragment<FragmentMainBinding,MainViewModel>(
     MainViewModel::class.java,
-    false
+    true
 ) {
 
    companion object{
