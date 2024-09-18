@@ -12,7 +12,9 @@ import retrofit2.http.GET
  */
 interface ApiService {
     @GET("/FRwK4ja2fc753bd4e3704d2b368b5bbe0104e39e0835f1c/bn/api/1.0/auth/oauth/token?branchID=0")
-    suspend fun test(): TestBean
+    suspend fun test(): TestBean<Value>
+    @GET("/FRwK4ja2fc753bd4e3704d2b368b5bbe0104e39e0835f1c/bn/api/1.0/auth/oauth/token?branchID=0")
+    fun test2(): Call<TestBean<Value>>
 }
 //https://mockapi.eolink.com/FRwK4ja2fc753bd4e3704d2b368b5bbe0104e39e0835f1c/bn/api/1.0/auth/oauth/token?branchID=0
 class SampleRepository {
@@ -20,7 +22,10 @@ class SampleRepository {
         RetrofitClient.createService<ApiService>("https://mockapi.eolink.com/")
     }
 
-    suspend fun test():TestBean {
+    suspend fun test():TestBean<Value> {
         return client.test()
+    }
+    fun test2():Call<TestBean<Value>> {
+        return client.test2()
     }
 }

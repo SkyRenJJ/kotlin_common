@@ -5,14 +5,14 @@ package com.easybuilder.common.net.sample
  * Created by sky.Ren on 2024/9/4.
  * Description:
  */
-data class TestBean(
+data class TestBean<T>(
     val errCode: Int,
     val message: String,
     val status: Boolean,
-    val value: Value
+    val value: T
 )
 
 data class Value(
-    val refresh_token: String,
+    val refresh_token: Int,
     val token: String
 )
