@@ -13,6 +13,6 @@ data class TestBean<T>(
 )
 
 data class Value(
-    val refresh_token: Int,
+    val refresh_token: String,
     val token: String
 )

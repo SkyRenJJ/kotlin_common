@@ -7,6 +7,9 @@ import androidx.lifecycle.lifecycleScope
 import com.easybuilder.base.databinding.ActivityMainBinding
 import com.easybuilder.common.base.BaseVMActivity
 import com.easybuilder.common.net.RetrofitClient
+import com.easybuilder.common.threadpool.BaseThreadFactory
+import com.easybuilder.common.threadpool.ThreadTask
+import com.easybuilder.common.threadpool.ThreadUtil
 import com.easybuilder.common.utils.PermissionHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,22 +37,23 @@ class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
     private fun onClick(view: View?) {
 //            mViewModel.textFlow.emit("${System.currentTimeMillis()}")
         mViewModel.test()
+//        ThreadUtil.getInstance().destroy()
 
-        val hasPermission = permissionTool.hasPermission(Manifest.permission.CAMERA)
-        Log.d(TAG, "onClick: "+hasPermission)
-        permissionTool.requestPermission(object : PermissionHelper.PermissionCallback {
-            override fun callback(
-                granted: MutableMap<String, Boolean>?,
-                denied: MutableMap<String, Boolean>?,
-                isAllGranted: Boolean,
-                isAllDenied: Boolean
-            ) {
-            }
-
-            override fun callback(result: Boolean?) {
-            }
-
-        },Manifest.permission.CAMERA)
+//        val hasPermission = permissionTool.hasPermission(Manifest.permission.CAMERA)
+//        Log.d(TAG, "onClick: "+hasPermission)
+//        permissionTool.requestPermission(object : PermissionHelper.PermissionCallback {
+//            override fun callback(
+//                granted: MutableMap<String, Boolean>?,
+//                denied: MutableMap<String, Boolean>?,
+//                isAllGranted: Boolean,
+//                isAllDenied: Boolean
+//            ) {
+//            }
+//
+//            override fun callback(result: Boolean?) {
+//            }
+//
+//        },Manifest.permission.CAMERA)
     }
 
     override fun loadData() {
@@ -61,6 +65,20 @@ class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
 //        }
 //    })
 
+        ThreadUtil.getInstance().addTask(object: ThreadTask() {
+            override fun runTask() {
+                for (i in 0 until 1000) {
+                    Thread.sleep(1000)
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.Main) {
+                                mBinding.tv.text = "测试3${i}"
+                        }
+                    }
+                }
+
+            }
+
+        })
     }
 
 }
