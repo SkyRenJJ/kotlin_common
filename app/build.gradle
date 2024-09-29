@@ -64,5 +64,6 @@ dependencies {
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest
     implementation libs.androidx.appcompat
+    implementation "com.geyifeng.immersionbar:immersionbar:3.2.2"
 
 }

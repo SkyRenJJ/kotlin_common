@@ -11,11 +11,14 @@ import com.easybuilder.common.threadpool.BaseThreadFactory
 import com.easybuilder.common.threadpool.ThreadTask
 import com.easybuilder.common.threadpool.ThreadUtil
 import com.easybuilder.common.utils.PermissionHelper
+import com.gyf.immersionbar.ImmersionBar
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
+import java.net.UnknownHostException
 
 class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
     MainViewModel::class.java
@@ -27,33 +30,22 @@ class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
     }
 
     override fun initView() {
-        mBinding.tv.setOnClickListener(this::onClick)
 
-        val beginTransaction = supportFragmentManager.beginTransaction()
-        beginTransaction.replace(R.id.frag, MainFragment.newInstance())
-        beginTransaction.commit()
+        ImmersionBar.with(this)
+            .statusBarColorTransformEnable(true)
+            .keyboardEnable(true)
+            .statusBarDarkFont(false,0.2f)
+            .init()
+
+        mBinding.tv.setOnClickListener(this::onClick)
+//
+//        val beginTransaction = supportFragmentManager.beginTransaction()
+//        beginTransaction.replace(R.id.frag, MainFragment.newInstance())
+//        beginTransaction.commit()
     }
 
     private fun onClick(view: View?) {
-//            mViewModel.textFlow.emit("${System.currentTimeMillis()}")
         mViewModel.test()
-//        ThreadUtil.getInstance().destroy()
-
-//        val hasPermission = permissionTool.hasPermission(Manifest.permission.CAMERA)
-//        Log.d(TAG, "onClick: "+hasPermission)
-//        permissionTool.requestPermission(object : PermissionHelper.PermissionCallback {
-//            override fun callback(
-//                granted: MutableMap<String, Boolean>?,
-//                denied: MutableMap<String, Boolean>?,
-//                isAllGranted: Boolean,
-//                isAllDenied: Boolean
-//            ) {
-//            }
-//
-//            override fun callback(result: Boolean?) {
-//            }
-//
-//        },Manifest.permission.CAMERA)
     }
 
     override fun loadData() {
@@ -64,21 +56,72 @@ class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
 //            mBinding.tv.text = "测试2"
 //        }
 //    })
+//
+//        val drawable = resources.getDrawable(R.drawable.test)
+//        val intrinsicWidth = drawable.intrinsicWidth
+//        val intrinsicHeight = drawable.intrinsicHeight
+//
+//        Log.d(TAG, "loadData image=: "+intrinsicWidth+" "+intrinsicHeight )
+//
+//
+//        val heightPixels = resources.displayMetrics.heightPixels
+//        val widthPixels = resources.displayMetrics.widthPixels
+//        Log.d(TAG, "loadData screen=: "+widthPixels+" "+heightPixels )
+//
+//
+//        val layoutParams = mBinding.ivTest.layoutParams
+////        layoutParams.height = intrinsicHeight
+//        layoutParams.width = intrinsicWidth
+//
+////        mBinding.ivTest.layoutParams = layoutParams
+//        mBinding.ivTest.setImageDrawable(drawable)
 
-        ThreadUtil.getInstance().addTask(object: ThreadTask() {
-            override fun runTask() {
-                for (i in 0 until 1000) {
-                    Thread.sleep(1000)
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.Main) {
-                                mBinding.tv.text = "测试3${i}"
+        val handler = CoroutineExceptionHandler { _, exception ->
+            if (exception is UnknownHostException) {
+                // 处理 UnknownHostException
+                Log.d(TAG, "loadData: error1")
+            } else {
+                // 处理其他异常
+                Log.d(TAG, "loadData: error2")
+            }
+        }
+    //方式1
+        lifecycleScope.launch(handler){
+            try {
+                mViewModel.sampleRepo.test().let {
+                    if (it != null) {
+                        if (it.isSuccessful) {
+                            Log.d(TAG, "loadData: success")
+                        }else{
+                            Log.d(TAG, "loadData: error3")
+
                         }
                     }
                 }
+            } catch (e: Exception) {
+                Log.d(TAG, "loadData: error4")
 
             }
+        }
+        //方式2
+//        lifecycleScope.launch{
+//            try {
+//                mViewModel.sampleRepo.test().let {
+//                    if (it != null) {
+//                        if (it.isSuccessful) {
+//                            Log.d(TAG, "loadData: success")
+//                        }else{
+//                            Log.d(TAG, "loadData: error3")
+//
+//                        }
+//                    }
+//                }
+//            } catch (e: Exception) {
+//                Log.d(TAG, "loadData: error4")
+//
+//            }
+//        }
 
-        })
     }
 
 }
