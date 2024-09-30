@@ -1,26 +1,20 @@
 package com.easybuilder.base
-import android.Manifest
+
 import android.util.Log
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.easybuilder.base.databinding.ActivityMainBinding
 import com.easybuilder.common.base.BaseVMActivity
-import com.easybuilder.common.net.RetrofitClient
-import com.easybuilder.common.threadpool.BaseThreadFactory
-import com.easybuilder.common.threadpool.ThreadTask
-import com.easybuilder.common.threadpool.ThreadUtil
-import com.easybuilder.common.utils.PermissionHelper
+import com.easybuilder.common.net.INetCallback
+import com.easybuilder.common.net.sample.TestBean
+import com.easybuilder.common.net.sample.Value
 import com.gyf.immersionbar.ImmersionBar
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Call
 import retrofit2.Response
 import java.net.UnknownHostException
 
-class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
+class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
     MainViewModel::class.java
 ) {
     override suspend fun observe() {
@@ -34,7 +28,7 @@ class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
         ImmersionBar.with(this)
             .statusBarColorTransformEnable(true)
             .keyboardEnable(true)
-            .statusBarDarkFont(false,0.2f)
+            .statusBarDarkFont(false, 0.2f)
             .init()
 
         mBinding.tv.setOnClickListener(this::onClick)
@@ -45,37 +39,19 @@ class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
     }
 
     private fun onClick(view: View?) {
-        mViewModel.test()
+        mViewModel.test3()
     }
 
     override fun loadData() {
         mBinding.tv.text = "测试"
+//        testNet2()
+//        testNet3()
+        testNet4()
+    }
 
-//    registerForActivityResult(ActivityResultContracts.StartActivityForResult(), {
-//        if (it.resultCode == RESULT_OK) {
-//            mBinding.tv.text = "测试2"
-//        }
-//    })
-//
-//        val drawable = resources.getDrawable(R.drawable.test)
-//        val intrinsicWidth = drawable.intrinsicWidth
-//        val intrinsicHeight = drawable.intrinsicHeight
-//
-//        Log.d(TAG, "loadData image=: "+intrinsicWidth+" "+intrinsicHeight )
-//
-//
-//        val heightPixels = resources.displayMetrics.heightPixels
-//        val widthPixels = resources.displayMetrics.widthPixels
-//        Log.d(TAG, "loadData screen=: "+widthPixels+" "+heightPixels )
-//
-//
-//        val layoutParams = mBinding.ivTest.layoutParams
-////        layoutParams.height = intrinsicHeight
-//        layoutParams.width = intrinsicWidth
-//
-////        mBinding.ivTest.layoutParams = layoutParams
-//        mBinding.ivTest.setImageDrawable(drawable)
 
+    //捕获异常的多种方式
+    fun testNet1() {
         val handler = CoroutineExceptionHandler { _, exception ->
             if (exception is UnknownHostException) {
                 // 处理 UnknownHostException
@@ -85,14 +61,14 @@ class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
                 Log.d(TAG, "loadData: error2")
             }
         }
-    //方式1
-        lifecycleScope.launch(handler){
+        //方式1
+        lifecycleScope.launch(handler) {
             try {
                 mViewModel.sampleRepo.test().let {
                     if (it != null) {
                         if (it.isSuccessful) {
                             Log.d(TAG, "loadData: success")
-                        }else{
+                        } else {
                             Log.d(TAG, "loadData: error3")
 
                         }
@@ -121,7 +97,36 @@ class MainActivity : BaseVMActivity<ActivityMainBinding,MainViewModel>(
 //
 //            }
 //        }
+    }
+    //方式2
+    fun testNet2() {
+        lifecycleScope.launch {
+            mViewModel.sampleRepo.test2(onSuccess = {
+                Log.d(TAG, "loadData: success " )
+            }, onError = {
+                Log.d(TAG, "loadData: error5" + it.message)
+            })
+        }
 
     }
+    //方式3
+    fun testNet3() {
+        mViewModel.test3()
+    }
 
+    //方式4
+    fun testNet4() {
+        lifecycleScope.launch {
+            mViewModel.sampleRepo.test4(object :INetCallback<Response<TestBean<Value>>>{
+                override fun onSuccess(t: Response<TestBean<Value>>) {
+                    Log.d(TAG, "loadData: success4")
+                }
+
+                override fun onFailed(e: Exception) {
+                    Log.d(TAG, "loadData: error4" + e.message)
+                }
+
+            })
+        }
+    }
 }
