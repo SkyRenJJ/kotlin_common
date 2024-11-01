@@ -1,5 +1,6 @@
 package com.easybuilder.base
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
@@ -8,6 +9,8 @@ import com.easybuilder.common.base.BaseVMActivity
 import com.easybuilder.common.net.INetCallback
 import com.easybuilder.common.net.sample.TestBean
 import com.easybuilder.common.net.sample.Value
+import com.easybuilder.common.utils.preferences
+import com.easybuilder.common.utils.putString
 import com.gyf.immersionbar.ImmersionBar
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -32,11 +35,10 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
             .init()
 
         mBinding.tv.setOnClickListener(this::onClick)
-//
-//        val beginTransaction = supportFragmentManager.beginTransaction()
-//        beginTransaction.replace(R.id.frag, MainFragment.newInstance())
-//        beginTransaction.commit()
+
     }
+
+
 
     private fun onClick(view: View?) {
         mViewModel.test3()
@@ -98,17 +100,19 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
 //            }
 //        }
     }
+
     //方式2
     fun testNet2() {
         lifecycleScope.launch {
             mViewModel.sampleRepo.test2(onSuccess = {
-                Log.d(TAG, "loadData: success " )
+                Log.d(TAG, "loadData: success ")
             }, onError = {
                 Log.d(TAG, "loadData: error5" + it.message)
             })
         }
 
     }
+
     //方式3
     fun testNet3() {
         mViewModel.test3()
@@ -117,7 +121,7 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
     //方式4
     fun testNet4() {
         lifecycleScope.launch {
-            mViewModel.sampleRepo.test4(object :INetCallback<Response<TestBean<Value>>>{
+            mViewModel.sampleRepo.test4(object : INetCallback<Response<TestBean<Value>>> {
                 override fun onSuccess(t: Response<TestBean<Value>>) {
                     Log.d(TAG, "loadData: success4")
                 }
