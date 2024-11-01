@@ -1,6 +1,6 @@
 package com.easybuilder.base
 
-import android.content.Context
+import android.Manifest
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
@@ -9,8 +9,8 @@ import com.easybuilder.common.base.BaseVMActivity
 import com.easybuilder.common.net.INetCallback
 import com.easybuilder.common.net.sample.TestBean
 import com.easybuilder.common.net.sample.Value
-import com.easybuilder.common.utils.preferences
-import com.easybuilder.common.utils.putString
+import com.easybuilder.common.utils.PermissionHelper
+import com.easybuilder.common.utils.log
 import com.gyf.immersionbar.ImmersionBar
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -35,9 +35,12 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
             .init()
 
         mBinding.tv.setOnClickListener(this::onClick)
-
     }
 
+    override fun onResume() {
+        Log.d(TAG, "onResume: ")
+        super.onResume()
+    }
 
 
     private fun onClick(view: View?) {
@@ -50,8 +53,6 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
 //        testNet3()
         testNet4()
     }
-
-
     //捕获异常的多种方式
     fun testNet1() {
         val handler = CoroutineExceptionHandler { _, exception ->
@@ -100,7 +101,6 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
 //            }
 //        }
     }
-
     //方式2
     fun testNet2() {
         lifecycleScope.launch {
