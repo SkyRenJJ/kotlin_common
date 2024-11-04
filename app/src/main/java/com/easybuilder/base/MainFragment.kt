@@ -28,4 +28,5 @@ class MainFragment:BaseVMFragment<FragmentMainBinding,MainViewModel>(
 
     override fun loadData() {
     }
+
 }

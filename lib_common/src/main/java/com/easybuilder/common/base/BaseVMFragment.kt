@@ -78,6 +78,12 @@ abstract class BaseVMFragment<VB:ViewBinding,VM:ViewModel>(
      */
     protected abstract fun loadData()
 
+    /**
+     * 处理返回事件
+     */
+    protected fun handleBackPressed():Boolean{
+        return false
+    }
 
     /**
      * 初始化ViewBinding

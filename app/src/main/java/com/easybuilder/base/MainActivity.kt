@@ -1,16 +1,20 @@
 package com.easybuilder.base
 
 import android.Manifest
+import android.content.SharedPreferences
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import com.easybuilder.base.databinding.ActivityMainBinding
+import com.easybuilder.base.location.MyLocationManager
 import com.easybuilder.common.base.BaseVMActivity
 import com.easybuilder.common.net.INetCallback
 import com.easybuilder.common.net.sample.TestBean
 import com.easybuilder.common.net.sample.Value
 import com.easybuilder.common.utils.PermissionHelper
 import com.easybuilder.common.utils.log
+import com.easybuilder.common.utils.preferences
 import com.gyf.immersionbar.ImmersionBar
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -20,6 +24,8 @@ import java.net.UnknownHostException
 class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
     MainViewModel::class.java
 ) {
+    var locationMgr :MyLocationManager?=null
+
     override suspend fun observe() {
         mViewModel.textFlow.collect {
             mBinding.tv.text = it
@@ -35,6 +41,17 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
             .init()
 
         mBinding.tv.setOnClickListener(this::onClick)
+
+//        supportFragmentManager.beginTransaction().add(MainFragment.newInstance(), "MainFragment").commit()
+
+        onBackPressedDispatcher.addCallback(this,object: OnBackPressedCallback(enabled = true) {
+            override fun handleOnBackPressed() {
+                "csdfsdfsdf".log()
+            }
+        })
+
+
+
     }
 
     override fun onResume() {
