@@ -23,13 +23,14 @@ import java.util.List;
  **/
 public abstract class BaseRecylerViewAdapter<T, VB extends ViewBinding>
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int TYPE_HEADER = 1;
-    private static final int TYPE_FOOTER = 2;
+    private static final int TYPE_HEADER = -1;
+    private static final int TYPE_FOOTER = -2;
 
     private boolean headerView;
     private boolean footerView;
 
     private Context context;
+    private boolean isMultitype = false;
 
     private OnItemClickListener<T> onItemClickListener;
 
@@ -64,16 +65,24 @@ public abstract class BaseRecylerViewAdapter<T, VB extends ViewBinding>
 
     /**
      * 添加数据
+     *
      * @param data
      */
-    public void addData(T data){
+    public void addData(T data) {
         if (this.dataList == null)
             this.dataList = new ArrayList<>();
         this.dataList.add(data);
         notifyDataSetChanged();
     }
 
-    public void setData(T data){
+    public void addData(int position, T data) {
+        if (this.dataList == null)
+            this.dataList = new ArrayList<>();
+        this.dataList.add(position, data);
+        notifyDataSetChanged();
+    }
+
+    public void setData(T data) {
         if (this.dataList == null)
             this.dataList = new ArrayList<>();
         this.dataList.clear();
@@ -93,6 +102,7 @@ public abstract class BaseRecylerViewAdapter<T, VB extends ViewBinding>
 
     /**
      * 获取数据列表
+     *
      * @return
      */
     public List<T> getDataList() {
@@ -166,20 +176,25 @@ public abstract class BaseRecylerViewAdapter<T, VB extends ViewBinding>
         } else if (viewType == TYPE_FOOTER) {
             return onCreateFooterVieiwHolder(parent, viewType);
         } else {
-            Type type = getClass().getGenericSuperclass();
-            if (type instanceof ParameterizedType) {
-                Type[] params = ((ParameterizedType) type).getActualTypeArguments();
-                Class clazz = (Class) params[1];
-                Method inflate = null;
-                try {
-                    inflate = clazz.getMethod("inflate", LayoutInflater.class, ViewGroup.class, boolean.class);
-                    VB binding = (VB) inflate.invoke(null, LayoutInflater.from(parent.getContext())
-                            , parent, false);
-                    return new BaseViewHolder<VB>(binding);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (isMultitype()) {
+                return onCreateMultiTypeVieiwHolder(parent, viewType);
+            } else {
+                Type type = getClass().getGenericSuperclass();
+                if (type instanceof ParameterizedType) {
+                    Type[] params = ((ParameterizedType) type).getActualTypeArguments();
+                    Class clazz = (Class) params[1];
+                    Method inflate = null;
+                    try {
+                        inflate = clazz.getMethod("inflate", LayoutInflater.class, ViewGroup.class, boolean.class);
+                        VB binding = (VB) inflate.invoke(null, LayoutInflater.from(parent.getContext())
+                                , parent, false);
+                        return new BaseViewHolder<VB>(binding);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
         }
         throw new RuntimeException("Binding view not found.");
     }
@@ -189,6 +204,10 @@ public abstract class BaseRecylerViewAdapter<T, VB extends ViewBinding>
     }
 
     protected RecyclerView.ViewHolder onCreateFooterVieiwHolder(ViewGroup parent, int viewType) {
+        return null;
+    }
+
+    protected RecyclerView.ViewHolder onCreateMultiTypeVieiwHolder(ViewGroup parent, int viewType) {
         return null;
     }
 
@@ -208,19 +227,24 @@ public abstract class BaseRecylerViewAdapter<T, VB extends ViewBinding>
             position = position - 1;
         }
         if (dataList != null && !dataList.isEmpty()) {
-            BaseViewHolder<VB> tmpHoder = (BaseViewHolder<VB>) holder;
-            bindData(tmpHoder, dataList.get(position), position);
-            int copyp = position;
-            tmpHoder.getBinding().getRoot().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (BaseRecylerViewAdapter.this.onItemClickListener != null) {
-                        BaseRecylerViewAdapter.this.onItemClickListener.onItemClick(copyp, dataList.get(copyp));
+            if (isMultitype()) {
+                bindMultiTypeData(holder, dataList.get(position), position);
+            } else {
+                BaseViewHolder<VB> tmpHoder = (BaseViewHolder<VB>) holder;
+                bindData(tmpHoder, dataList.get(position), position);
+                int copyp = position;
+                tmpHoder.getBinding().getRoot().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (BaseRecylerViewAdapter.this.onItemClickListener != null) {
+                            BaseRecylerViewAdapter.this.onItemClickListener.onItemClick(copyp, dataList.get(copyp));
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -244,7 +268,19 @@ public abstract class BaseRecylerViewAdapter<T, VB extends ViewBinding>
         if (footerView && position == getItemCount() - 1) {
             return TYPE_FOOTER;
         }
+        if (isMultitype()){
+            return getItemMultiType(position);
+        }
         return 0;
+
+    }
+
+    protected int getItemMultiType(int position) {
+        return 0;
+    }
+
+    protected boolean isMultitype() {
+        return isMultitype;
     }
 
     public Context getContext() {
@@ -252,6 +288,8 @@ public abstract class BaseRecylerViewAdapter<T, VB extends ViewBinding>
     }
 
     public abstract void bindData(BaseViewHolder<VB> holder, T data, int position);
+
+    public abstract void bindMultiTypeData(RecyclerView.ViewHolder holder, T t, int position);
 
     protected void bindDataForHeader(HeaderViewHolder<? extends ViewBinding> holder) {
     }

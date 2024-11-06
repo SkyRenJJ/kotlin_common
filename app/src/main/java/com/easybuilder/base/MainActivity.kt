@@ -1,13 +1,20 @@
 package com.easybuilder.base
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.easybuilder.base.adapter.PageAdapter
+import com.easybuilder.base.bean.PageBean
 import com.easybuilder.base.databinding.ActivityMainBinding
 import com.easybuilder.base.location.MyLocationManager
+import com.easybuilder.base.pages.ChatActivity
 import com.easybuilder.common.base.BaseVMActivity
 import com.easybuilder.common.net.INetCallback
 import com.easybuilder.common.net.sample.TestBean
@@ -15,6 +22,8 @@ import com.easybuilder.common.net.sample.Value
 import com.easybuilder.common.utils.PermissionHelper
 import com.easybuilder.common.utils.log
 import com.easybuilder.common.utils.preferences
+import com.easybuilder.common.utils.startActivityByClsExt
+import com.easybuilder.common.utils.startActivityExt
 import com.gyf.immersionbar.ImmersionBar
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -24,40 +33,35 @@ import java.net.UnknownHostException
 class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
     MainViewModel::class.java
 ) {
-    var locationMgr :MyLocationManager?=null
-
+    private val pageAdapter:PageAdapter by lazy { PageAdapter(this) }
     override suspend fun observe() {
-        mViewModel.textFlow.collect {
-            mBinding.tv.text = it
-        }
     }
 
     override fun initView() {
 
-        ImmersionBar.with(this)
-            .statusBarColorTransformEnable(true)
-            .keyboardEnable(true)
-            .statusBarDarkFont(false, 0.2f)
-            .init()
+//        ImmersionBar.with(this)
+//            .statusBarColorTransformEnable(true)
+//            .keyboardEnable(true)
+//            .statusBarDarkFont(false, 0.2f)
+//            .init()
 
-        mBinding.tv.setOnClickListener(this::onClick)
 
-//        supportFragmentManager.beginTransaction().add(MainFragment.newInstance(), "MainFragment").commit()
-
-        onBackPressedDispatcher.addCallback(this,object: OnBackPressedCallback(enabled = true) {
-            override fun handleOnBackPressed() {
-                "csdfsdfsdf".log()
+        mBinding.rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        mBinding.rv.adapter = pageAdapter
+        pageAdapter.setOnItemClickListener { position, data ->
+           val pageData = data as  PageBean
+            pageData.let {
+                pageData.cls.let {
+                    startActivityByClsExt(it,null)
+                }
             }
-        })
+        }
 
-
+        var pageItem = PageBean(ChatActivity::class.java, "流式聊天-倒叙",R.mipmap.ic_launcher)
+        pageAdapter.addData(pageItem)
 
     }
 
-    override fun onResume() {
-        Log.d(TAG, "onResume: ")
-        super.onResume()
-    }
 
 
     private fun onClick(view: View?) {
@@ -65,7 +69,6 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
     }
 
     override fun loadData() {
-        mBinding.tv.text = "测试"
 //        testNet2()
 //        testNet3()
         testNet4()

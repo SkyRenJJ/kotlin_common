@@ -127,7 +127,7 @@ fun SharedPreferences.clear() {
 /**
  * 启动Activity
  */
-inline fun <reified T : Any> Context.startActivity(bundles: Bundle? = null) {
+inline fun <reified T : Any> Activity.startActivityExt(bundles: Bundle? = null) {
     val intent = Intent(this, T::class.java)
     bundles?.let {
         intent.putExtras(bundles)
@@ -135,10 +135,19 @@ inline fun <reified T : Any> Context.startActivity(bundles: Bundle? = null) {
     startActivity(intent)
 }
 
+inline fun Activity.startActivityByClsExt(cls:Class<out Activity>,bundles: Bundle? = null) {
+    val intent = Intent(this, cls)
+    bundles?.let {
+        intent.putExtras(bundles)
+    }
+    startActivity(intent)
+}
+
+
 /**
  * 启动Activity
  */
-inline fun <reified T : Any> Context.startActivity(vararg params: Pair<String, Any?>) {
+inline fun <reified T : Any> Activity.startActivityExt(vararg params: Pair<String, Any?>) {
     val intent = Intent(this, T::class.java)
     params.forEach {
         val key = it.first
@@ -177,7 +186,7 @@ inline fun <reified T : Any> Context.startActivity(vararg params: Pair<String, A
 /**
  * 启动Activity For Result
  */
-inline fun <reified T : Activity> Activity.startActivityForResult(
+inline fun <reified T : Activity> Activity.startActivityForResultExt(
     launcher: ActivityResultLauncher<Intent>,
     vararg params: Pair<String, Any?>
 ) {
@@ -219,7 +228,7 @@ inline fun <reified T : Activity> Activity.startActivityForResult(
 /**
  * 请求权限
  */
-fun AppCompatActivity.requestPermission(
+fun AppCompatActivity.requestPermissionExt(
     permission: String,
     onGranted: () -> Unit,
     onDenied: () -> Unit
@@ -243,7 +252,7 @@ fun AppCompatActivity.requestPermission(
 /**
  * 请求权限-批量
  */
-fun Fragment.requestPermission(
+fun Fragment.requestPermissionExt(
     permission: String,
     onGranted: () -> Unit,
     onDenied: () -> Unit
@@ -264,7 +273,7 @@ fun Fragment.requestPermission(
     }
 }
 
-fun AppCompatActivity.requestPermissions(
+fun AppCompatActivity.requestPermissionsExt(
     permissions: Array<String>,
     onGranted: () -> Unit,
     onDenied: (deniedPermissions: List<String>) -> Unit
@@ -290,7 +299,7 @@ fun AppCompatActivity.requestPermissions(
     }
 }
 
-fun Fragment.requestPermissions(
+fun Fragment.requestPermissionsExt(
     permissions: Array<String>,
     onGranted: () -> Unit,
     onDenied: (deniedPermissions: List<String>) -> Unit
