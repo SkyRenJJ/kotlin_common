@@ -2,7 +2,10 @@ package com.easybuilder.common.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
 import androidx.lifecycle.ViewModelProvider
@@ -24,16 +27,17 @@ abstract class BaseVMActivity<VB :ViewBinding,VM:ViewModel>(
     protected lateinit var mViewModel:VM
     //ViewBinding的实例
     protected lateinit var mBinding:VB
-    //Activity启动器
-    protected val activityLauncher by lazy { ActivityLauncher() }
+//    //Activity启动器
+//    protected val activityLauncher by lazy { ActivityLauncher() }
 
     //权限工具
-    protected lateinit var permissionTool: PermissionHelper
+//    protected lateinit var permissionTool: PermissionHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityLauncher.registerForActivityResult(this)
-        if (!::permissionTool.isInitialized) permissionTool = PermissionHelper(this)
+
+//        activityLauncher.registerForActivityResult(this)
+//        if (!::permissionTool.isInitialized) permissionTool = PermissionHelper(this)
         // 初始化ViewModel
         mViewModel = createViewModel(viewModelClass)
         // 初始化ViewBinding

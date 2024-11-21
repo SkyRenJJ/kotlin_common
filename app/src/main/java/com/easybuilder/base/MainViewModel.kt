@@ -6,6 +6,7 @@ import com.easybuilder.common.net.sample.SampleRepository
 import com.easybuilder.common.net.sample.TestBean
 import com.easybuilder.common.net.sample.Value
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
@@ -14,8 +15,8 @@ class MainViewModel:ViewModel() {
     val sampleRepo: SampleRepository by lazy {
         SampleRepository()
     }
-
     val textFlow:MutableSharedFlow<String> = MutableSharedFlow()
+
 
     /**
      * 接口网络测试
