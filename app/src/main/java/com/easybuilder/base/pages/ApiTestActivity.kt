@@ -1,6 +1,7 @@
 package com.easybuilder.base.pages
 
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,6 +11,7 @@ import com.easybuilder.base.MainViewModel
 import com.easybuilder.base.R
 import com.easybuilder.base.databinding.ActivityApiTestBinding
 import com.easybuilder.common.base.BaseVMActivity
+import com.easybuilder.common.utils.log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -84,5 +86,14 @@ class ApiTestActivity : BaseVMActivity<ActivityApiTestBinding,MainViewModel>(
         }
         val test = mViewModel.sampleRepo.test()
         return "$request   ${ test!!.body()!!.message }"
+    }
+
+//    override fun onBackPressed() {
+//        super.onBackPressed()
+//        "测试".log()
+//    }
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        "keydonw".log()
+        return super.onKeyDown(keyCode, event)
     }
 }

@@ -19,52 +19,79 @@ import java.lang.reflect.ParameterizedType
  * Created by sky.Ren on 2024/9/4.
  * Description: Fragment基类
  */
-abstract class BaseVMFragment<VB:ViewBinding,VM:ViewModel>(
-    private val viewModelClass: Class<VM>
-    ,
+abstract class BaseVMFragment<VB : ViewBinding, VM : ViewModel>(
+    private val viewModelClass: Class<VM>,
     //是否绑定Activity使用同一个viewmodel实例
-    private val isBindActivity:Boolean=false
-):Fragment() {
+    private val isBindActivity: Boolean = false,
+    //是否懒加载
+    private val isLazyLoad: Boolean = false
+) : Fragment() {
     //ViewModel
-    protected lateinit var mBinding:VB
+    protected lateinit var mBinding: VB
+
     //ViewModel
-    protected lateinit var mViewModel:VM
+    protected lateinit var mViewModel: VM
+
     //权限工具
-    protected val permissionTool:PermissionHelper? by lazy {
+    protected val permissionTool: PermissionHelper? by lazy {
         activity?.let {
             PermissionHelper(it)
         }
     }
+
+    //懒加载
+    private var isViewCreated = false
+    private var isVisibleToUser = false
+    private var isDataLoaded = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mViewModel = createViewModel(isBindActivity,viewModelClass)
+        mViewModel = createViewModel(isBindActivity, viewModelClass)
         mBinding = initViewBinding()
         return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initialize();
-    }
-
-    private fun initialize() {
+        isViewCreated = true
         observeViewModel()
         initView()
-        loadData()
+        if (isLazyLoad) {
+            tryLoadData()
+        } else {
+            loadData()
+        }
     }
 
     /**
      * 订阅ViewModel
      */
-    private fun observeViewModel(){
+    private fun observeViewModel() {
         lifecycleScope.launch {
             observe()
         }
     }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        this.isVisibleToUser = isVisibleToUser
+        if (isLazyLoad)
+            tryLoadData()
+    }
+
+    /**
+     * 尝试加载数据
+     */
+    private fun tryLoadData() {
+        if (isViewCreated && isVisibleToUser && !isDataLoaded && isLazyLoad) {
+            loadData()
+            isDataLoaded = true
+        }
+    }
+
 
     protected suspend abstract fun observe()
 
@@ -81,7 +108,7 @@ abstract class BaseVMFragment<VB:ViewBinding,VM:ViewModel>(
     /**
      * 处理返回事件
      */
-    protected fun handleBackPressed():Boolean{
+    protected fun handleBackPressed(): Boolean {
         return false
     }
 
@@ -99,8 +126,8 @@ abstract class BaseVMFragment<VB:ViewBinding,VM:ViewModel>(
     /**
      * 创建viewmodleprovoider
      */
-    private fun <T:ViewModel> createViewModel(bindActivity:Boolean=false, cls:Class<T>) : T{
-        when(bindActivity){
+    private fun <T : ViewModel> createViewModel(bindActivity: Boolean = false, cls: Class<T>): T {
+        when (bindActivity) {
             true -> return ViewModelProvider(requireActivity())[cls]
             false -> return ViewModelProvider(this)[cls]
         }

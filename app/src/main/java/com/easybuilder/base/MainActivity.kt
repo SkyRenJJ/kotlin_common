@@ -16,6 +16,7 @@ import com.easybuilder.base.databinding.ActivityMainBinding
 import com.easybuilder.base.location.MyLocationManager
 import com.easybuilder.base.pages.ApiTestActivity
 import com.easybuilder.base.pages.ChatActivity
+import com.easybuilder.base.pages.ComposeActivity
 import com.easybuilder.common.base.BaseVMActivity
 import com.easybuilder.common.net.INetCallback
 import com.easybuilder.common.net.sample.TestBean
@@ -57,11 +58,16 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
                 }
             }
         }
+       var pages = ArrayList<PageBean>()
 
         var pageItem = PageBean(ChatActivity::class.java, "流式聊天-倒叙",R.mipmap.ic_launcher)
-        pageAdapter.addData(pageItem)
+        pages.add(pageItem)
         var pageItem2 = PageBean(ApiTestActivity::class.java, "Api测试-协程",R.mipmap.ic_launcher)
-        pageAdapter.addData(pageItem2)
+        pages.add(pageItem2)
+
+        pages.add(PageBean(ComposeActivity::class.java, "Compose-UI",R.mipmap.ic_launcher))
+
+        pageAdapter.dataList = pages
 
     }
 
