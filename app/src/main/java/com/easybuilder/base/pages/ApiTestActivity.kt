@@ -7,8 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.easybuilder.base.MainViewModel
 import com.easybuilder.base.R
+import com.easybuilder.base.adapter.TestKotlinAdapter
 import com.easybuilder.base.databinding.ActivityApiTestBinding
 import com.easybuilder.common.base.BaseVMActivity
 import com.easybuilder.common.utils.log
@@ -22,6 +25,7 @@ import java.io.IOException
 class ApiTestActivity : BaseVMActivity<ActivityApiTestBinding,MainViewModel>(
     viewModelClass = MainViewModel::class.java
 ) {
+    private var testKotlinAdapter: TestKotlinAdapter? = null
 
     override suspend fun observe() {
     }
@@ -47,31 +51,40 @@ class ApiTestActivity : BaseVMActivity<ActivityApiTestBinding,MainViewModel>(
 //            }
 //            println("Result 4: $result4")
 //        }
-        lifecycleScope.launch {
-            val result1 = async(Dispatchers.IO){
-                performNetworkRequest("1")
-                println("1-----------")
-            }
-            val result2 = async(Dispatchers.IO){
-                performNetworkRequest("2")
-                println("2-----------")
-            }
-            val result3 = async(Dispatchers.IO){
-                performNetworkRequest("3")
-                println("3-----------")
-            }
-            val result4 = async(Dispatchers.IO){
-                performNetworkRequest("4")
-                println("4-----------")
-            }
-            println("Result 1: ${result1.await()}")
-            println("Result 2: ${result2.await()}")
-            println("Result 3: ${result3.await()}")
-            println("Result 4: ${result4.await()}")
-        }
+//        println("Result 5: -------------")
+//        lifecycleScope.launch {
+//            val result1 = async(Dispatchers.IO){
+//                performNetworkRequest("1")
+//                println("1-----------")
+//            }
+//            val result2 = async(Dispatchers.IO){
+//                performNetworkRequest("2")
+//                println("2-----------")
+//            }
+//            val result3 = async(Dispatchers.IO){
+//                performNetworkRequest("3")
+//                println("3-----------")
+//            }
+//            val result4 = async(Dispatchers.IO){
+//                performNetworkRequest("4")
+//                println("4-----------")
+//            }
+//            println("Result 1: ${result1.await()}")
+//            println("Result 2: ${result2.await()}")
+//            println("Result 3: ${result3.await()}")
+//            println("Result 4: ${result4.await()}")
+//        }
+
+        Glide.with(this).load("https://img0.baidu.com/it/u=1008951549,1654888911&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=800").into(mBinding.ivHead)
     }
 
     override fun loadData() {
+        mBinding.rv.layoutManager= LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+        testKotlinAdapter = TestKotlinAdapter(this)
+        mBinding.rv.adapter = testKotlinAdapter
+
+        testKotlinAdapter?.setDataList(mutableListOf("1","2","3"))
+
     }
 
     // 模拟网络请求的函数

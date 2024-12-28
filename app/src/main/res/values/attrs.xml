@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TmcbarView">
+        <attr name="congestionColor" format="color" />
+        <attr name="nonCongestionColor" format="color" />
+        <attr name="progress" format="float" />
+        <attr name="carIcon" format="reference" />
+    </declare-styleable>
+</resources>

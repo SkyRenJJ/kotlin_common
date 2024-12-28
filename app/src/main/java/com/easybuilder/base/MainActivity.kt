@@ -50,21 +50,14 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
 
         mBinding.rv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         mBinding.rv.adapter = pageAdapter
-        pageAdapter.setOnItemClickListener { position, data ->
+        pageAdapter.setOnItemClickListener { _, data ->
            val pageData = data as  PageBean
-            pageData.let {
-                pageData.cls.let {
-                    startActivityByClsExt(it,null)
-                }
-            }
+            startActivityByClsExt(pageData.cls,null)
         }
        var pages = ArrayList<PageBean>()
 
-        var pageItem = PageBean(ChatActivity::class.java, "流式聊天-倒叙",R.mipmap.ic_launcher)
-        pages.add(pageItem)
-        var pageItem2 = PageBean(ApiTestActivity::class.java, "Api测试-协程",R.mipmap.ic_launcher)
-        pages.add(pageItem2)
-
+        pages.add(PageBean(ChatActivity::class.java, "流式聊天-倒叙",R.mipmap.ic_launcher))
+        pages.add(PageBean(ApiTestActivity::class.java, "Api测试-协程",R.mipmap.ic_launcher))
         pages.add(PageBean(ComposeActivity::class.java, "Compose-UI",R.mipmap.ic_launcher))
 
         pageAdapter.dataList = pages

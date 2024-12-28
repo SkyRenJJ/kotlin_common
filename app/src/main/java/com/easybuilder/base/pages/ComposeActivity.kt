@@ -57,10 +57,15 @@ fun ListItem(name: String) {
     var backgroundColor by remember { mutableStateOf(Color.White) }
 
     Text(text = "${name}",
-        style = TextStyle(fontSize = 30.sp, color = colors[colorIndex]),
+        style = TextStyle(
+            fontSize = 30.sp,
+            color = colors[colorIndex],
+            background = backgroundColor
+        ),
         modifier = Modifier.clickable {
 //            colorIndex = (colorIndex + 1) % colors.size
         })
+
 
     LaunchedEffect(Unit) {
 //        while (true) {
@@ -68,7 +73,12 @@ fun ListItem(name: String) {
 //            colorIndex = (colorIndex + 1) % colors.size
 //        }
 
-        val animator = android.animation.ValueAnimator.ofArgb(Color.White.toArgb(), Color.Red.toArgb(), Color.Green.toArgb(), Color.Blue.toArgb()).apply {
+        val animator = android.animation.ValueAnimator.ofArgb(
+            Color.White.toArgb(),
+            Color.Red.toArgb(),
+            Color.Green.toArgb(),
+            Color.Blue.toArgb()
+        ).apply {
             duration = 3000 // 3 seconds
             repeatCount = android.animation.ValueAnimator.INFINITE
             repeatMode = android.animation.ValueAnimator.REVERSE
@@ -101,52 +111,7 @@ fun Greeting(name: String) {
         LazyColumn {
             items(
                 listOf(
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    2,
-                    3,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    2,
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    3,
-                    3
+                    1
                 )
             ) {
                 ListItem(name = "$name $it")

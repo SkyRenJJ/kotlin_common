@@ -11,31 +11,39 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
-class MainViewModel:ViewModel() {
+class MainViewModel : ViewModel() {
     val sampleRepo: SampleRepository by lazy {
         SampleRepository()
     }
-    val textFlow:MutableSharedFlow<String> = MutableSharedFlow()
+    val textFlow: MutableSharedFlow<String> = MutableSharedFlow()
 
+    var call: Call<TestBean<Value>>? = null
 
     /**
      * 接口网络测试
      */
-    fun test3() {
-            sampleRepo.test3().enqueue(object : retrofit2.Callback<TestBean<Value>>{
-                override fun onResponse(p0: Call<TestBean<Value>>, p1: Response<TestBean<Value>>) {
-                    viewModelScope.launch {
-                        textFlow.emit(p1.body()?.message!!)
-                    }
-
+    fun test3(): Call<TestBean<Value>> {
+        val call = sampleRepo.test3()
+        call.enqueue(object : retrofit2.Callback<TestBean<Value>> {
+            override fun onResponse(p0: Call<TestBean<Value>>, p1: Response<TestBean<Value>>) {
+                viewModelScope.launch {
+                    textFlow.emit(p1.body()?.message!!)
                 }
 
-                override fun onFailure(p0: Call<TestBean<Value>>, p1: Throwable) {
-                    viewModelScope.launch {
-                        textFlow.emit(p1.message!!)
-                    }
+            }
+
+            override fun onFailure(p0: Call<TestBean<Value>>, p1: Throwable) {
+                viewModelScope.launch {
+                    textFlow.emit(p1.message!!)
                 }
-            })
+            }
+        })
+        return call
+    }
+
+    fun cancel() {
+        call = test3()
+        call?.cancel()
 
     }
 }
