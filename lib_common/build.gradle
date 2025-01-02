@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id 'maven-publish'
 }
 
 android {
@@ -48,4 +49,15 @@ dependencies {
 //    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'  // 可选：用于日志记录的拦截器
 
 
+}
+
+afterEvaluate {
+    android.libraryVariants.each {variant->
+        publishing.publications.create(variant.name,MavenPublication){
+            from components.findByName(variant.name)
+            groupId = 'com.github.Njfk'//自定义
+            artifactId = 'kotlin_common'//自定义
+            version = 'v1.0.2'//自定义
+        }
+    }
 }
