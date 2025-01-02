@@ -36,6 +36,12 @@
         android:theme="@style/Theme.Kotlin_base"
         tools:targetApi="31">
         <activity
+            android:name=".pages.BaseRvAdapterKtActivity"
+            android:exported="false" />
+        <activity
+            android:name=".pages.PagingLibraryActivity"
+            android:exported="false" />
+        <activity
             android:name=".pages.ComposeActivity"
             android:exported="false" />
         <activity

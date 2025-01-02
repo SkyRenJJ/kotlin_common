@@ -14,19 +14,19 @@ import java.lang.reflect.ParameterizedType
  * Created by sky.Ren on 2024/12/23.
  * Description: kotlin-recyclerview适配器
  */
-@Deprecated("developing")
-abstract class BaseRecyclerViewAdapterKt<T,VB:ViewBinding>(
-   private val context:Context
-) :RecyclerView.Adapter<RecyclerView.ViewHolder>(),BaseRecyclerViewService<T>{
-    companion object{
+abstract class BaseRecyclerViewAdapterKt<T, VB : ViewBinding>(
+    private val context: Context
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), BaseRecyclerViewService<T> {
+    companion object {
         const val TYPE_HEADER: Int = -1
         const val TYPE_FOOTER: Int = -2
     }
+
     private var dataList: MutableList<T>? = null
-    private var headerView:Boolean = false
-    private var footerView:Boolean = false
-    private var isMultitype:Boolean = false
-    private var onItemClickListener: OnItemClickListener<T>? = null
+    private var headerView: Boolean = false
+    private var footerView: Boolean = false
+    private var isMultitype: Boolean = false
+    var onItemClickListener: OnItemClickListener<T>? = null
 
     override fun setDataList(data: MutableList<T>) {
         dataList = data
@@ -47,9 +47,9 @@ abstract class BaseRecyclerViewAdapterKt<T,VB:ViewBinding>(
         }
     }
 
-    override fun setData(index:Int,data: T) {
+    override fun setData(index: Int, data: T) {
         dataList?.let {
-            it.set(index,data)
+            it.set(index, data)
             notifyDataSetChanged()
         }
     }
@@ -64,7 +64,7 @@ abstract class BaseRecyclerViewAdapterKt<T,VB:ViewBinding>(
 
     override fun updateItem(data: T, position: Int) {
         dataList?.let {
-            it.set(position,data)
+            it.set(position, data)
             notifyItemChanged(position)
         }
     }
@@ -141,14 +141,14 @@ abstract class BaseRecyclerViewAdapterKt<T,VB:ViewBinding>(
     }
 
 
-    protected fun onCreateHeaderVieiwHolder(
+    protected open fun onCreateHeaderVieiwHolder(
         parent: ViewGroup?,
         viewType: Int
     ): RecyclerView.ViewHolder? {
         return null
     }
 
-    protected fun onCreateFooterVieiwHolder(
+    protected open fun onCreateFooterVieiwHolder(
         parent: ViewGroup?,
         viewType: Int
     ): RecyclerView.ViewHolder? {
@@ -161,7 +161,7 @@ abstract class BaseRecyclerViewAdapterKt<T,VB:ViewBinding>(
     ): RecyclerView.ViewHolder? {
         return null
     }
-    
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, pos: Int) {
         if (getItemViewType(pos) == TYPE_HEADER) {
             val tmpHoder = holder as HeaderViewHolder<*>
@@ -173,7 +173,7 @@ abstract class BaseRecyclerViewAdapterKt<T,VB:ViewBinding>(
             bindDataForFooter(tmpHoder)
             return
         }
-        var position  = pos
+        var position = pos
         if (headerView) {
             position = position - 1
         }
@@ -208,11 +208,11 @@ abstract class BaseRecyclerViewAdapterKt<T,VB:ViewBinding>(
     protected open fun getItemMultiType(position: Int): Int {
         return 0
     }
-    
+
     protected open fun isMultitype(): Boolean {
         return isMultitype
     }
-    
+
     fun getContext(): Context {
         return context
     }
@@ -225,6 +225,7 @@ abstract class BaseRecyclerViewAdapterKt<T,VB:ViewBinding>(
         val i = if (dataList != null) dataList!!.size else 0
         return i + getHeaderCount() + getFooterCount()
     }
+
     fun getHeaderCount(): Int {
         return if (!headerView) 0 else 1
     }
@@ -237,10 +238,10 @@ abstract class BaseRecyclerViewAdapterKt<T,VB:ViewBinding>(
 
     abstract fun bindMultiTypeData(holder: RecyclerView.ViewHolder?, t: T, position: Int)
 
-    protected fun bindDataForHeader(holder: HeaderViewHolder<out ViewBinding?>?) {
+    protected open fun bindDataForHeader(holder: HeaderViewHolder<out ViewBinding?>?) {
     }
 
-    protected fun bindDataForFooter(holder: FooterViewHolder<out ViewBinding?>?) {
+    protected open fun bindDataForFooter(holder: FooterViewHolder<out ViewBinding?>?) {
     }
 }
 
@@ -251,6 +252,7 @@ class BaseViewHolder<VB : ViewBinding?>(val binding: VB) : RecyclerView.ViewHold
 class HeaderViewHolder<HB : ViewBinding?>(val binding: HB) : RecyclerView.ViewHolder(
     binding!!.root
 )
+
 class FooterViewHolder<FB : ViewBinding?>(val binding: FB) : RecyclerView.ViewHolder(
     binding!!.root
 )

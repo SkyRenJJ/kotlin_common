@@ -36,6 +36,12 @@ import androidx.core.animation.ValueAnimator
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.easybuilder.base.R
+import com.easybuilder.base.pages.compose.AnimatedSizeChange
+import com.easybuilder.base.pages.compose.DemoData
+import com.easybuilder.base.pages.compose.LargeText
+import com.easybuilder.base.pages.compose.SwipeToDismissBoxDemo
+import com.easybuilder.base.pages.compose.TMCView
+import com.easybuilder.base.pages.compose.ViewPage
 import kotlinx.coroutines.delay
 import java.util.Timer
 import java.util.TimerTask
@@ -43,8 +49,19 @@ import java.util.TimerTask
 class ComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        var data = mutableListOf<DemoData>()
+        repeat(10){
+            data.add(DemoData(it,"item $it"))
+        }
         setContent {
-            Greeting("hello compose")
+//            Greeting("hello compose")
+//            LargeText("hello compose")
+//            TMCView()
+//            AnimatedSizeChange()
+//            SwipeableExample()
+//            SwipeToDismissBoxDemo(data)
+            ViewPage(data)
         }
     }
 

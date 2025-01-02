@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.easybuilder.base"
-        minSdk 24
+        minSdk 25
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -62,6 +62,7 @@ dependencies {
     implementation libs.androidx.activity
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.core.animation
+    implementation libs.androidx.compose.material
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
@@ -74,5 +75,26 @@ dependencies {
 
     // Glide 图片加载库
     implementation 'com.github.bumptech.glide:glide:4.16.0'
+
+    //paging
+    def paging_version = "3.3.2"
+
+    implementation "androidx.paging:paging-runtime:$paging_version"
+
+    // alternatively - without Android dependencies for tests
+    testImplementation "androidx.paging:paging-common:$paging_version"
+
+    // optional - RxJava2 support
+    implementation "androidx.paging:paging-rxjava2:$paging_version"
+
+    // optional - RxJava3 support
+    implementation "androidx.paging:paging-rxjava3:$paging_version"
+
+    // optional - Guava ListenableFuture support
+    implementation "androidx.paging:paging-guava:$paging_version"
+
+    // optional - Jetpack Compose integration
+    implementation "androidx.paging:paging-compose:3.3.2"
+
 
 }
