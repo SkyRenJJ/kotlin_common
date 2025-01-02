@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
  * Description: 分页库测试
  */
 
+
 class ItemCustomApdater(contxt: Context): BaseRecyclerViewAdapterKt<String, ItemPageBinding>(contxt) {
     override fun bindData(
         holder: com.easybuilder.common.base.adapter.BaseViewHolder<ItemPageBinding>?,
