@@ -50,14 +50,3 @@ dependencies {
 
 
 }
-
-afterEvaluate {
-    android.libraryVariants.each {variant->
-        publishing.publications.create(variant.name,MavenPublication){
-            from components.findByName(variant.name)
-            groupId = 'com.github.Njfk'//自定义
-            artifactId = 'kotlin_common'//自定义
-            version = 'v1.0.2'//自定义
-        }
-    }
-}
