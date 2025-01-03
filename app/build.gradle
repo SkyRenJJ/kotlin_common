@@ -56,7 +56,6 @@ dependencies {
     implementation libs.androidx.ui.graphics
     implementation libs.androidx.ui.tooling.preview
     implementation libs.androidx.material3
-    implementation project(':lib_common')
     implementation libs.androidx.recyclerview
     implementation libs.material
     implementation libs.androidx.activity
@@ -96,5 +95,6 @@ dependencies {
     // optional - Jetpack Compose integration
     implementation "androidx.paging:paging-compose:3.3.2"
 
+    implementation project(':lib_common')
 
 }

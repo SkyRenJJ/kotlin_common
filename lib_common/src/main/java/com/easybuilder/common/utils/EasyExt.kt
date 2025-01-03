@@ -7,7 +7,9 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Parcelable
+import android.os.SystemClock
 import android.util.Log
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -323,4 +325,20 @@ fun Fragment.requestPermissionsExt(
     } else {
         launcher.launch(deniedPermissions.toTypedArray())
     }
+}
+
+fun View.setOnSafeClickListener(interval: Long = 500, action: ((View)->Unit)?=null,quickClick:((View)->Unit)? = null) {
+    this.setOnClickListener{
+        val lastClickTime = ViewHolder.lastClickTimeMap[this]
+        if (lastClickTime == null || SystemClock.elapsedRealtime() - lastClickTime > interval) {
+            ViewHolder.lastClickTimeMap[this] = SystemClock.elapsedRealtime()
+            action?.invoke(it)
+        }else{
+            quickClick?.invoke(it)
+        }
+    }
+}
+
+object ViewHolder {
+    val lastClickTimeMap = HashMap<Any?, Long>()
 }

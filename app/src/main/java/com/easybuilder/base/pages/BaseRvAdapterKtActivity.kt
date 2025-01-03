@@ -3,6 +3,7 @@ package com.easybuilder.base.pages
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.easybuilder.common.base.adapter.FooterViewHolder
 import com.easybuilder.common.base.adapter.HeaderViewHolder
 import com.easybuilder.common.base.adapter.OnItemClickListener
 import com.easybuilder.common.utils.log
+import com.easybuilder.common.utils.setOnSafeClickListener
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -43,6 +45,11 @@ class ItemCustomApdater(contxt: Context): BaseRecyclerViewAdapterKt<String, Item
         super.bindDataForHeader(holder)
         var h = holder as HeaderViewHolder<ItemPageBinding>
         h?.binding?.title?.text = "头部"
+        h?.binding?.title?.setOnSafeClickListener(quickClick = {
+            Toast.makeText(getContext(), "头部点击2", Toast.LENGTH_SHORT).show()
+        }, action = {
+            Toast.makeText(getContext(), "头部点击", Toast.LENGTH_SHORT).show()
+        })
     }
 
 
