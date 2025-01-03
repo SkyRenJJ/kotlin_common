@@ -31,6 +31,12 @@ android {
     buildFeatures{
         viewBinding=true
     }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
 }
 
 dependencies {
@@ -49,4 +55,18 @@ dependencies {
 //    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'  // 可选：用于日志记录的拦截器
 
 
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.github.Njfk'
+            artifactId = 'kotlin_common'
+            version = '1.0'
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
 }
