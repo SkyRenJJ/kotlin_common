@@ -114,7 +114,7 @@ fun ListItem(name: String) {
 fun Greeting(name: String) {
     Row() {
         Image(
-            bitmap = ImageBitmap.imageResource(id = R.drawable.test),
+            bitmap = ImageBitmap.imageResource(id = R.mipmap.ic_launcher),
             contentDescription = null,
             modifier = Modifier
                 .size(100.dp, 100.dp)
