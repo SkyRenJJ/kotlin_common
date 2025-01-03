@@ -14,6 +14,8 @@ import com.easybuilder.base.R
 import com.easybuilder.base.adapter.TestKotlinAdapter
 import com.easybuilder.base.databinding.ActivityApiTestBinding
 import com.easybuilder.common.base.BaseVMActivity
+import com.easybuilder.common.threadpool.ThreadTask
+import com.easybuilder.common.threadpool.ThreadUtil
 import com.easybuilder.common.utils.log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -31,49 +33,12 @@ class ApiTestActivity : BaseVMActivity<ActivityApiTestBinding,MainViewModel>(
     }
 
     override fun initView() {
-//        lifecycleScope.launch {
-//            val result1 = withContext(Dispatchers.IO){
-//                performNetworkRequest("1")
-//            }
-//            println("Result 1: $result1")
-//            val result2 = withContext(Dispatchers.IO){
-//                performNetworkRequest("2")
-//            }
-//            println("Result 2: $result2")
-//
-//            val result3 = withContext(Dispatchers.IO){
-//                performNetworkRequest("3")
-//            }
-//            println("Result 3: $result3")
-//
-//            val result4 = withContext(Dispatchers.IO){
-//                performNetworkRequest("4")
-//            }
-//            println("Result 4: $result4")
-//        }
-//        println("Result 5: -------------")
-//        lifecycleScope.launch {
-//            val result1 = async(Dispatchers.IO){
-//                performNetworkRequest("1")
-//                println("1-----------")
-//            }
-//            val result2 = async(Dispatchers.IO){
-//                performNetworkRequest("2")
-//                println("2-----------")
-//            }
-//            val result3 = async(Dispatchers.IO){
-//                performNetworkRequest("3")
-//                println("3-----------")
-//            }
-//            val result4 = async(Dispatchers.IO){
-//                performNetworkRequest("4")
-//                println("4-----------")
-//            }
-//            println("Result 1: ${result1.await()}")
-//            println("Result 2: ${result2.await()}")
-//            println("Result 3: ${result3.await()}")
-//            println("Result 4: ${result4.await()}")
-//        }
+
+        ThreadUtil.getInstance().addTask(object : ThreadTask() {
+            override fun runTask() {
+                "${Thread.currentThread().id}".log("===")
+            }
+        });
 
         Glide.with(this).load("https://img0.baidu.com/it/u=1008951549,1654888911&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=800").into(mBinding.ivHead)
     }
