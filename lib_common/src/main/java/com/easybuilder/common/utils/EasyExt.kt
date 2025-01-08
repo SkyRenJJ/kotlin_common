@@ -30,6 +30,52 @@ fun String.log(tag: String?="ILogger") {
 }
 
 /**
+ * 打印日志，简化调用方式（默认标签为ILogger）-Debug模式专用，方便调试查看日志信息。
+ */
+fun String.logd(tag: String?="ILogger") {
+    Log.d(tag, this)
+}
+
+/**
+ * 打印日志，简化调用方式（默认标签为ILogger）-Error模式专用，方便调试查看日志信息。
+ */
+fun String.loge(tag: String?="ILogger") {
+    Log.e(tag, this)
+}
+
+/**
+ * 打印日志，简化调用方式（默认标签为ILogger）-Info模式专用，方便调试查看日志信息。
+ */
+fun String.logi(tag: String?="ILogger") {
+    Log.i(tag, this)
+}
+
+/**
+ * 打印日志，简化调用方式（默认标签为ILogger）-Verbose模式专用，方便调试查看日志信息。
+ */
+fun String.logv(tag: String?="ILogger") {
+    Log.v(tag, this)
+}
+
+/**
+ * 打印日志，简化调用方式（默认标签为ILogger）-Warn模式专用，方便调试查看日志信息。
+ */
+fun String.logw(tag: String?="ILogger") {
+    Log.w(tag, this)
+}
+
+/**
+ * 打印日志，简化调用方式（默认标签为ILogger）-Wtf模式专用，方便调试查看日志信息。
+ */
+fun String.logwtf(tag: String?="ILogger") {
+    Log.wtf(tag, this)
+}
+
+fun Context.preferences_(name:String): SharedPreferences{
+    return getSharedPreferences(name, Context.MODE_PRIVATE)
+}
+
+/**
  * 获取SharedPreferences
  */
 val Context.preferences: SharedPreferences

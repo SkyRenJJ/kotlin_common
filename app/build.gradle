@@ -96,5 +96,8 @@ dependencies {
     implementation "androidx.paging:paging-compose:3.3.2"
 
     implementation project(':lib_common')
+//    implementation 'com.github.SkyRenJJ:kotlin_common:1.0.0-release'
+
+    implementation 'com.badlogicgames.gdx:gdx:1.13.0'
 
 }

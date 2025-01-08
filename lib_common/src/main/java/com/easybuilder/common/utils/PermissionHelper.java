@@ -21,6 +21,7 @@ import java.util.Set;
  * @createTime 2024/1/11
  * @describe PermissionHelper 权限请求工具
  **/
+@Deprecated(forRemoval = true, since = "v1.0.1")
 public class PermissionHelper {
     private final ActivityResultLauncher<String> requestSinglePermissionLauncher;
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher;

@@ -76,8 +76,7 @@ class ItemCustomApdater(contxt: Context): BaseRecyclerViewAdapterKt<String, Item
     }
 }
 
-class BaseRvAdapterViewModel : ViewModel() {
-}
+class BaseRvAdapterViewModel : ViewModel()
 
 class BaseRvAdapterKtActivity : BaseVMActivity<ActivityPagingBinding, BaseRvAdapterViewModel>(
     BaseRvAdapterViewModel::class.java

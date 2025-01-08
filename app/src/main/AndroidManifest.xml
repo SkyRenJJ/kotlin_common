@@ -45,6 +45,9 @@
             android:name=".pages.ComposeActivity"
             android:exported="false" />
         <activity
+            android:name=".pages.PermissionTestActivity"
+            android:exported="false" />
+        <activity
             android:name=".pages.ApiTestActivity"
             android:exported="false" />
         <activity

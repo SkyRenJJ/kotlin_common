@@ -1,10 +1,12 @@
 package com.easybuilder.base.pages.compose
 
 import android.graphics.Paint.Align
+import androidx.collection.mutableFloatListOf
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
@@ -51,6 +53,7 @@ import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -60,6 +63,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -296,7 +300,12 @@ fun ViewPage(data: MutableList<DemoData>) {
         pageSize = PageSize.Fill,
         modifier = Modifier.fillMaxSize()
     ) { page: Int ->
-        Box(modifier = Modifier.fillMaxSize().background(color = Color.Blue), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.Blue),
+            contentAlignment = Alignment.Center
+        ) {
             Text(
                 text = data.get(page).title,
                 modifier = Modifier
@@ -309,5 +318,69 @@ fun ViewPage(data: MutableList<DemoData>) {
             )
         }
 
+    }
+}
+
+//滚动实现卫星效果
+@Composable
+fun satellitView(main: String?, childs: MutableList<String>?) {
+    var offsetX = remember {
+        mutableStateListOf(1.0f,-1.0f,0.0f)
+    }
+    var offsetY = remember {
+        mutableStateListOf(0.0f,0.0f,-1.0f)
+    }
+    var isOpen by remember {
+        mutableStateOf(false)
+    }
+
+
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        for (i in 0 until childs!!.size) {
+            val animateDpAsState = animateDpAsState(targetValue = if(isOpen) 50.dp * offsetX.get(i) else 0.dp)
+            val animateDpAsStateY = animateDpAsState(targetValue = if(isOpen) 50.dp * offsetY.get(i) else 0.dp)
+            Text(
+                text = childs[i],
+                modifier = Modifier
+                    .offset(x = animateDpAsState.value, y = animateDpAsStateY.value)
+                    .height(50.dp)
+                    .width(50.dp)
+                    .clickable {
+                        isOpen = !isOpen
+                    },
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                style = TextStyle(background = Color.Red),
+
+            )
+        }
+    }
+}
+
+
+@Composable
+fun MyCanvas() {
+    Canvas(modifier = Modifier.size(200.dp)) {
+        // 绘制一个圆形
+        drawCircle(color = Color.Blue, radius = 50f, center = center)
+
+        // 绘制一个矩形
+        drawRect(
+            color = Color.Red,
+            size = androidx.compose.ui.geometry.Size(100f, 100f),
+            topLeft = androidx.compose.ui.geometry.Offset(50f, 50f)
+        )
+
+        // 绘制一个路径
+        var path = Path()
+        drawPath(
+            path = path.apply {
+                moveTo(10f, 10f)
+                lineTo(100f, 10f)
+                lineTo(50f, 100f)
+                close()
+            },
+            color = Color.Green
+        )
     }
 }

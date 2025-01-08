@@ -42,6 +42,7 @@ import com.easybuilder.base.pages.compose.LargeText
 import com.easybuilder.base.pages.compose.SwipeToDismissBoxDemo
 import com.easybuilder.base.pages.compose.TMCView
 import com.easybuilder.base.pages.compose.ViewPage
+import com.easybuilder.base.pages.compose.satellitView
 import kotlinx.coroutines.delay
 import java.util.Timer
 import java.util.TimerTask
@@ -49,7 +50,6 @@ import java.util.TimerTask
 class ComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         var data = mutableListOf<DemoData>()
         repeat(10){
             data.add(DemoData(it,"item $it"))
@@ -61,7 +61,8 @@ class ComposeActivity : ComponentActivity() {
 //            AnimatedSizeChange()
 //            SwipeableExample()
 //            SwipeToDismissBoxDemo(data)
-            ViewPage(data)
+//            ViewPage(data)
+            satellitView("点击", mutableListOf("1","2","3"))
         }
     }
 

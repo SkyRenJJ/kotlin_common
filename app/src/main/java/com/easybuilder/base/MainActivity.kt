@@ -19,6 +19,7 @@ import com.easybuilder.base.pages.BaseRvAdapterKtActivity
 import com.easybuilder.base.pages.ChatActivity
 import com.easybuilder.base.pages.ComposeActivity
 import com.easybuilder.base.pages.PagingLibraryActivity
+import com.easybuilder.base.pages.PermissionTestActivity
 import com.easybuilder.common.base.BaseVMActivity
 import com.easybuilder.common.net.INetCallback
 import com.easybuilder.common.net.sample.TestBean
@@ -63,6 +64,7 @@ class MainActivity : BaseVMActivity<ActivityMainBinding, MainViewModel>(
         pages.add(PageBean(ComposeActivity::class.java, "Compose-UI",R.mipmap.ic_launcher))
         pages.add(PageBean(PagingLibraryActivity::class.java, "Paging-UI",R.mipmap.ic_launcher))
         pages.add(PageBean(BaseRvAdapterKtActivity::class.java, "kotlin版本适配器测试",R.mipmap.ic_launcher))
+        pages.add(PageBean(PermissionTestActivity::class.java, "kotlin版本权限请求测试",R.mipmap.ic_launcher))
 
         pageAdapter.dataList = pages
 
