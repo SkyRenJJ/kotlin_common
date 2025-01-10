@@ -1,7 +1,7 @@
 # kotlin_common
 
 #### 介绍
-方便kotli快速开发框架
+方便kotlin快速开发框架
 #### 软件架构
 软件架构说明
 
@@ -9,7 +9,7 @@
 #### 添加依赖
 [![](https://jitpack.io/v/Njfk/kotlin_common.svg)](https://jitpack.io/#Njfk/kotlin_common)
 
-####功能说明
+####功能说明  
 1.网络请求  
 2.线程池  
 3.MVVM基类  

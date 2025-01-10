@@ -4,7 +4,9 @@ import android.graphics.Paint.Align
 import androidx.collection.mutableFloatListOf
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -337,8 +339,10 @@ fun satellitView(main: String?, childs: MutableList<String>?) {
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         for (i in 0 until childs!!.size) {
-            val animateDpAsState = animateDpAsState(targetValue = if(isOpen) 50.dp * offsetX.get(i) else 0.dp)
-            val animateDpAsStateY = animateDpAsState(targetValue = if(isOpen) 50.dp * offsetY.get(i) else 0.dp)
+            val animateDpAsState = animateDpAsState(targetValue = if(isOpen) 50.dp * offsetX.get(i) else 0.dp, animationSpec = spring( dampingRatio = Spring.DampingRatioMediumBouncy, // 弹性阻尼系数
+                stiffness = Spring.StiffnessLow ))
+            val animateDpAsStateY = animateDpAsState(targetValue = if(isOpen) 50.dp * offsetY.get(i) else 0.dp, animationSpec = spring( dampingRatio = Spring.DampingRatioMediumBouncy, // 弹性阻尼系数
+                stiffness = Spring.StiffnessLow ))
             Text(
                 text = childs[i],
                 modifier = Modifier
